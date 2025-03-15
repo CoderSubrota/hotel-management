@@ -16,9 +16,12 @@
     {% include "share/navbar.html" %}
 
     <div class="container mt-5">
+        
+        {% if user.is_authenticated %}
         <div class="text-center">
             <p class="fw-bold fs-2 text-success">Welcome, {{ user.first_name }}</p>
         </div>
+        {% endif %}
 
         <div id="carouselExample" class="carousel slide">
             <div class="carousel-inner">

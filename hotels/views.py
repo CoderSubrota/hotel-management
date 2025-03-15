@@ -44,43 +44,57 @@ def book_hotel(request, hotel_id):
         check_in = request.POST.get("check_in")
         check_out = request.POST.get("check_out")
 
-        check_in_date = datetime.strptime(check_in, "%Y-%m-%d")
-        check_out_date = datetime.strptime(check_out, "%Y-%m-%d")
+        try:
+            check_in_date = datetime.strptime(check_in, "%Y-%m-%d")
+            check_out_date = datetime.strptime(check_out, "%Y-%m-%d")
 
-        number_of_days = (check_out_date - check_in_date).days
-        
-        hotel_price_per_night = Decimal(hotel.price_per_night)  
-        total_price = hotel_price_per_night * Decimal(number_of_days)  
+            # Validate that check-out is after check-in
+            if check_out_date <= check_in_date:
+                messages.error(request, "Check-out date must be after check-in date.")
+                return render(request, "hotels/book_hotel.html", {"hotel": hotel})
 
-        user_balance = Decimal(user.balance)  
+            number_of_days = (check_out_date - check_in_date).days
+            
+            if number_of_days <= 0:
+                messages.error(request, "The duration of stay must be at least one day.")
+                return render(request, "hotels/book_hotel.html", {"hotel": hotel})
 
-        if user_balance >= total_price:
-            user.balance = user_balance - total_price  
-            user.save()
+            hotel_price_per_night = Decimal(hotel.price_per_night)  
+            total_price = hotel_price_per_night * Decimal(number_of_days)  
 
-            booking = Booking.objects.create(
-                user=user,
-                hotel=hotel,
-                check_in=check_in_date,
-                check_out=check_out_date,
-                total_price=total_price
-            )
+            user_balance = Decimal(user.balance)  
 
-            if booking:
-                send_mail(
-                    "Hotel Booking Confirmation",
-                    f"Dear {user.username},\n\nYour booking at {hotel.name} is confirmed!\nCheck-in: {check_in}\nCheck-out: {check_out}\nTotal Price: ${total_price:.2f}\n\nThank you!",
-                    "subrotachandra6@gmail.com",
-                    [user.email],
-                    fail_silently=False,
+            if user_balance >= total_price:
+                user.balance = user_balance - total_price  
+                user.save()
+
+                booking = Booking.objects.create(
+                    user=user,
+                    hotel=hotel,
+                    check_in=check_in_date,
+                    check_out=check_out_date,
+                    total_price=total_price
                 )
 
-                messages.success(request, f"Your booking has been confirmed for {hotel.name} hotel")
-                return redirect("hotel_list")
-        else:
-            messages.error(request, "You do not have enough balance to book this hotel.")
+                if booking:
+                    send_mail(
+                        "Hotel Booking Confirmation",
+                        f"Dear {user.username},\n\nYour booking at {hotel.name} is confirmed!\nCheck-in: {check_in}\nCheck-out: {check_out}\nTotal Price: ${total_price:.2f}\n\nThank you!",
+                        "subrotachandra6@gmail.com",
+                        [user.email],
+                        fail_silently=False,
+                    )
+
+                    messages.success(request, f"Your booking has been confirmed for {hotel.name} hotel.")
+                    return redirect("hotel_list")
+            else:
+                messages.error(request, "You do not have enough balance to book this hotel.")
+        except ValueError:
+            messages.error(request, "Invalid date format. Please use YYYY-MM-DD.")
+            return render(request, "hotels/book_hotel.html", {"hotel": hotel})
 
     return render(request, "hotels/book_hotel.html", {"hotel": hotel})
+
 
 @login_required(login_url="login-page") 
 def add_review(request, hotel_id):
@@ -260,7 +274,7 @@ def create_payment(request):
                 payment_method=payment_method_id,
                 confirmation_method='manual',
                 confirm=True,
-                return_url='https://hotel-management-26.onrender.com/hotel/hotel_list',  # Update this URL as needed
+                return_url='https://hotel-management-26.onrender.com/hotel/hotel_list', 
             )
 
             # Save booking information to the database
@@ -286,3 +300,4 @@ def contact_us(request):
 def about_us(request):
     
     return render(request, "hotels/about_us.html")
+

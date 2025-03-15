@@ -151,8 +151,12 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_APP_PASSWORD =env('EMAIL_APP_PASSWORD')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER') 
+EMAIL_HOST_PASSWORD = env('EMAIL_APP_PASSWORD')  
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://hotel-management-26.onrender.com",
+]
 
 # Media files settings
 MEDIA_URL = '/media/'
