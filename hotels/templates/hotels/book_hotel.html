@@ -24,7 +24,7 @@
                 <p><strong>💰 Price per night:</strong> ${{ hotel.price_per_night }}</p>
                 <p><strong>💵 Your balance:</strong> ${{ user.balance }}</p>
               
-                    <form method="POST" class="mt-3">
+                    <form method="POST" action="{% url 'book_hotel' %}" class="mt-3">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="check_in" class="form-label">Check-in Date:</label>

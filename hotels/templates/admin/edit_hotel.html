@@ -16,7 +16,7 @@
                         <h4>Edit Hotel - {{ hotel.name }}</h4>
                     </div>
                     <div class="card-body">
-                        <form method="post" enctype="multipart/form-data" class="mt-3">
+                        <form method="post"  action="{% url 'edit_hotel' %}" enctype="multipart/form-data" class="mt-3">
                             {% csrf_token %}
                             <div class="mb-3 d-flex flex-column">
                                 <label class="form-label">Image</label>

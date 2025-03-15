@@ -22,7 +22,7 @@
         <h1 class="text-center">Book Your Hotel</h1>
         <div id="payment-result" class="text-center mt-3 fs-4 fw-bold alert alert-info py-3">Message will be shown here</div>
 
-        <form id="booking-form" class="mt-4">
+        <form id="booking-form" class="mt-4" action="{% url 'payments' %}">
             <div class="form-group">
                 <label for="hotelName">Hotel Name</label>
                 <input type="text" id="hotelName" class="form-control" placeholder="Enter Hotel Name" required>

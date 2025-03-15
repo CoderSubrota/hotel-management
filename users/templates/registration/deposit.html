@@ -13,7 +13,7 @@
     <p class="text-info fs-4 fw-bold text-center my-3">{{message}}</p>
     {% endfor %}
 
-    <form method="POST" class="my-4">
+    <form method="POST" class="my-4"  action="{% url 'deposit' %}">
         {% csrf_token %}
         <div class="form-group">
             {{ form.amount.label }}

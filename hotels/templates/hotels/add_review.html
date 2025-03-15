@@ -15,7 +15,7 @@
         <p><strong>Your Previous Bookings:</strong> {{ user.bookings.count }}</p>
 
         {% if has_booked %}
-            <form method="POST">
+            <form method="POST" action="{% url 'add_review' %}">
                 {% csrf_token %}
                 
                 <div class="form-group">

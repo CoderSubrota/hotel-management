@@ -15,7 +15,7 @@
         <div class="card shadow-lg p-4" style="width: 550px;">
             <h2 class="text-center mb-3 text-info">Register</h2>
 
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form}}
     
