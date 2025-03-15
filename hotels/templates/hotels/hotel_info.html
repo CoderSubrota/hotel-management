@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .carousel-item > img {
+            height:420px;
+            border-radius:20px;
+        }
+    </style>
+    {% include "cdn/cdn.html" %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    {% include "share/navbar.html" %}
+
+    <div class="container mt-5">
+        <div class="text-center">
+            <p class="fw-bold fs-2 text-success">Welcome, {{ user.first_name }}</p>
+        </div>
+
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://media.istockphoto.com/id/1467742991/photo/tourist-resort-at-sunset.jpg?s=612x612&w=0&k=20&c=xROsYFdlXHyphRpgL4_rHwfY36VgSpCaMQU5qjYOvmM=" class="d-block w-100" alt="">
+              </div>
+              <div class="carousel-item">
+                <img src="https://img.freepik.com/free-photo/beautiful-luxury-outdoor-swimming-pool-hotel-resort_74190-7433.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1561501900-3701fa6a0864?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bHV4dXJ5JTIwaG90ZWx8ZW58MHx8MHx8fDA%3D" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+    <h2 id="booking" class="fs-2 fw-bold text-center my-5 text-primary"> Book Our Luxury Hotel </h2>
+        {% for message in  messages %}
+        <p class="text-primary text-center fs-4 fw-bold text-center my-3">{{message}}</p>
+        {% endfor %}
+
+        {% if not hotels %}
+            <h2 class="my-5 text-danger text-center">No hotel data available</h2>
+        {% else %}
+            <div class="row my-5">
+                {% for hotel in hotels %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-lg">
+                            <img src="{{ hotel.image.url }}" class="card-img-top" alt="{{ hotel.name }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{% url 'hotel_detail' hotel.id %}" class="text-decoration-none text-dark">
+                                       Hotel Name: {{ hotel.name }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted">Address: {{ hotel.address }}</p>
+                                <a href="{% url 'hotel_detail' hotel.id %}" class="btn btn-primary w-100">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card mb-3 mx-auto my-5 shadow-lg" style="max-width: 90%; border-radius: 15px;">
+        <div class="row g-0">
+            <div class="col-lg-4">
+                <img src="https://plus.unsplash.com/premium_photo-1661923725782-f73c990fbddf?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bHV4dXJ5JTIwaG90ZWx8ZW58MHx8MHx8fDA%3D" class="rounded-start" style="height:100%; width:100%;" alt="Luxury Hotel">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Experience Our Luxury Hotel</h5>
+                    <p class="card-text text-muted">
+                        Staying at our luxury hotel was an unforgettable experience. From the moment I arrived, the elegant decor and warm hospitality enveloped me in comfort. The plush bed with crisp linens provided a perfect night's sleep, while the exquisite dining options tantalized my taste buds. I enjoyed relaxing by the stunning pool and indulging in rejuvenating spa treatments. Each detail, from the attentive staff to the breathtaking views, made my stay feel like a true escape. I left feeling refreshed, pampered, and eager to return for another luxurious getaway.
+                    </p>
+                    <a href="#booking" class="btn btn-primary mt-3">Book Your Stay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "share/footer.html" %}
+</body>
+</html>

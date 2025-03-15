@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "cdn/cdn.html" %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Hotel</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        #card-element {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    {% include "share/navbar.html" %}
+    <div class="container my-5">
+        <h1 class="text-center">Book Your Hotel</h1>
+        <div id="payment-result" class="text-center mt-3 fs-4 fw-bold alert alert-info py-3">Message will be shown here</div>
+
+        <form id="booking-form" class="mt-4">
+            <div class="form-group">
+                <label for="hotelName">Hotel Name</label>
+                <input type="text" id="hotelName" class="form-control" placeholder="Enter Hotel Name" required>
+            </div>
+            <div class="form-group">
+                <label for="checkInDate">Check-in Date</label>
+                <input type="date" id="checkInDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="checkOutDate">Check-out Date</label>
+                <input type="date" id="checkOutDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="card-element">Credit or Debit Card</label>
+                <div id="card-element"></div>
+                <div id="card-errors" role="alert" class="text-danger"></div>
+            </div>
+            <button id="submit" class="btn btn-primary btn-block">Pay</button>
+        </form>
+    </div>
+
+    <script>
+       
+        const stripe = Stripe('{{ stripe_public_key }}');
+        const elements = stripe.elements();
+        const cardElement = elements.create('card');
+        cardElement.mount('#card-element');
+
+        const form = document.getElementById('booking-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const { paymentMethod, error } = await stripe.createPaymentMethod({
+                type: 'card',
+                card: cardElement,
+            });
+
+            if (error) {
+            
+                document.getElementById('card-errors').innerText = error.message;
+            } else {
+               
+                const hotelName = document.getElementById('hotelName').value;
+                const checkInDate = document.getElementById('checkInDate').value;
+                const checkOutDate = document.getElementById('checkOutDate').value;
+
+                const response = await fetch('http://127.0.0.1:8000/hotel/create_payment/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}', 
+                    },
+                    body: JSON.stringify({
+                        paymentMethodId: paymentMethod.id,
+                        hotelName: hotelName,
+                        checkInDate: checkInDate,
+                        checkOutDate: checkOutDate,
+                    }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('payment-result').innerText = 'Payment successful! Booking confirmed.';
+                } else {
+                    document.getElementById('payment-result').innerText = result.error;
+                }
+            }
+        });
+    </script>
+
+    {% include "share/footer.html" %}
+</body>
+</html>

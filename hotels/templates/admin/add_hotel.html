@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Hotel</title>
+    {% include "cdn/cdn.html" %}
+</head>
+<body>
+    {% include "share/navbar.html" %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Add Hotel</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" class="mt-3">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">Hotel Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Image</label>
+                                {{ form.image }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Price per Night</label>
+                                {{ form.price_per_night }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Available Rooms</label>
+                                {{ form.available_rooms }}
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Add Hotel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "share/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "cdn/cdn.html" %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Hotel Management</title>
+
+</head>
+<body>
+  
+        {% include "share/navbar.html" %}
+
+     <!-- Display Messages -->
+     <div class="container my-5">
+        {% if messages %}
+            <div class="alert-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    <div class="container my-y">
+        <h1 class="mb-4">Hotel Management</h1>
+
+        <!-- Button to Add New Hotel -->
+        <a href="{% url 'add_hotel' %}" class="btn btn-success mb-3">Add New Hotel</a>
+
+        <!-- Table to View and CRUD Hotels -->
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Serial</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Hotel Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hotel in hotels %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hotel.id }}</td>
+                    <td>{{ hotel.name }}</td>
+                    <td>{{ hotel.address }}</td>
+                    <td>
+                        <!-- View Hotel Details -->
+                        <a href="{% url 'hotel_detail' hotel.id %}" class="btn btn-info btn-sm">View</a>
+                        
+                        <!-- Edit Hotel -->
+                        <a href="{% url 'edit_hotel' hotel.id %}" class="btn btn-warning btn-sm">Edit</a>
+
+                        <!-- Delete Hotel Form -->
+                        <form action="{% url 'delete_hotel' hotel.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this hotel?')">Delete</button>
+                        </form>
+
+             
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No hotels found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+  {% include "share/footer.html" %}
+</body>
+</html>

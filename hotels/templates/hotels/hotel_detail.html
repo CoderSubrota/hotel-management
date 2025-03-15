@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "cdn/cdn.html" %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hotel.name }}</title>
+</head>
+<body>
+    {% include "share/navbar.html" %}
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Hotel Image -->
+            <div class="col-md-6">
+                <img src="{{ hotel.image.url }}" class="img-fluid rounded shadow-lg" alt="{{ hotel.name }}">
+            </div>
+
+            <!-- Hotel Details -->
+            <div class="col-md-6">
+                <h1 class="fw-bold text-primary">{{ hotel.name }}</h1>
+                <p class="text-muted">{{ hotel.address }}</p>
+                <a href="{% url 'book_hotel' hotel.id %}" class="btn btn-success w-100 my-3">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="mt-5">
+            <h3 class="text-warning"><i class="bi bi-star-fill"></i> Reviews</h3>
+            {% if reviews %}
+                <ul class="list-group">
+                    {% for review in reviews %}
+                        <li class="list-group-item">
+                            <strong class="text-primary">{{ review.user.first_name}} {{  review.user.last_name}} </strong>: 
+                            {{ review.comment }}
+                            <span class="badge bg-warning text-dark ms-2">{{ review.rating }}/5</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No reviews yet. Be the first to review!</p>
+            {% endif %}
+            <a href="{% url 'add_review' hotel.id %}" class="btn btn-outline-primary mt-3">Leave a Review</a>
+        </div>
+    </div>
+
+    {% include "share/footer.html" %}
+</body>
+</html>

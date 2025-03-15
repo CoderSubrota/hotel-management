@@ -1,0 +1,40 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active fw-bold" aria-current="page" href="{% url "hotel_list" %}">Home</a>
+          {% if not user.is_authenticated %}
+          <a class="nav-link" href="{% url "register" %}">Register</a>
+          <a class="nav-link" href="{% url "login-page" %}">Login</a>
+          {% endif %}
+
+          {% if user.is_authenticated %}
+          {% comment %} Sub1255#%#$  {% endcomment %}
+          <a class="nav-link fw-bold text-danger" href="{% url "logout-user" %}">LogOut</a>
+          
+          <a class="nav-link fw-bold" href="{% url "about_us" %}">About Us</a>
+          <a class="nav-link fw-bold" href="{% url "contact_us" %}">Contact Us</a>
+          <a class="nav-link fw-bold" href="{% url "payments" %}">Payments</a>
+          
+          {% if "Admin" in request.user.groups.all|join:"," %}
+          <a class="nav-link fw-bold" href="{% url "admin_dashboard" %}">Admin Dashboard</a>
+          <a class="nav-link fw-bold" href="{% url "hotel_crud" %}">Manage Hotel</a>
+          {% endif %}
+
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+   {% if  user.username %}
+   <div>
+    <img src="{{ user.profile_picture.url }}" style="height:65px;width:65px; border-radius:50%; border:3px solid cyan;" alt="Profile Picture" srcset="">
+
+  </div>
+   {% endif %}
+  </nav>

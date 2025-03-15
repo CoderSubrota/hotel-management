@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "cdn/cdn.html" %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review - {{ hotel.name }} </title>
+</head>
+<body>
+    {% include "share/navbar.html" %}
+    <div class="container my-5">
+        <h1 class="mb-4">Add a Review for {{ hotel.name }}</h1>
+
+        <p><strong>Address:</strong> {{ hotel.address }}</p>
+        <p><strong>Your Previous Bookings:</strong> {{ user.bookings.count }}</p>
+
+        {% if has_booked %}
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="rating">Rating (1-5):</label>
+                    <select id="rating" name="rating" class="form-control" required>
+                        <option value="1">1 - Poor</option>
+                        <option value="2">2 - Fair</option>
+                        <option value="3">3 - Good</option>
+                        <option value="4">4 - Very Good</option>
+                        <option value="5">5 - Excellent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Your Review:</label>
+                    <textarea id="comment" name="comment" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary my-3">Submit Review</button>
+            </form>
+        {% else %}
+            <div class="alert alert-danger mt-3">You can only review hotels you have booked.</div>
+        {% endif %}
+
+        <a href="{% url 'hotel_detail' hotel.id %}" class="btn btn-secondary mt-3">Back to Hotel</a>
+    </div>
+
+   {% include "share/footer.html" %}
+</body>
+</html>

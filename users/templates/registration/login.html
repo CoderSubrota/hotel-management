@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Login</title>
+    {% include "cdn/cdn.html" %}
+</head>
+
+<body>
+ {% include "share/navbar.html" %}
+
+<p class="fs-3 fw-bold text-center text-info my-3"> {{email_message}}</p>
+ <!-- Display messages -->
+ {% if messages %}
+ <div class="alert-container">
+     {% for message in messages %}
+         <div class="alert alert-info
+             {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+             {{ message }}
+         </div>
+     {% endfor %}
+ </div>
+{% endif %}
+
+    <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+        <div class="card shadow-lg p-4" style="width: 350px;">
+            <h2 class="text-center mb-3">Login</h2>
+            <form method="POST">
+                {% csrf_token %}
+          
+                <div class="mb-3">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+                
+                <div class="mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+    
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+    
+            <div class="text-center mt-3">
+                <small>
+                    Don't have an account? <a href="{% url 'register' %}">Register</a> <br>
+                    <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                </small>
+            </div>
+        </div>
+    
+    </div>
+    {% include "share/footer.html" %}
+</body>
+</html>
