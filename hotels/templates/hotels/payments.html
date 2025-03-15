@@ -69,7 +69,7 @@
                 const checkInDate = document.getElementById('checkInDate').value;
                 const checkOutDate = document.getElementById('checkOutDate').value;
 
-                const response = await fetch('http://127.0.0.1:8000/hotel/create_payment/', {
+                const response = await fetch('https://hotel-management-26.onrender.com/hotel/create_payment/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -260,7 +260,7 @@ def create_payment(request):
                 payment_method=payment_method_id,
                 confirmation_method='manual',
                 confirm=True,
-                return_url='http://127.0.0.1:8000/hotel/hotel_list',  # Update this URL as needed
+                return_url='https://hotel-management-26.onrender.com/hotel/hotel_list',  # Update this URL as needed
             )
 
             # Save booking information to the database

@@ -3,12 +3,9 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-from dotenv import load_dotenv
-import os
-load_dotenv() 
+import dj_database_url
 
-
-FRONTEND_URL="http://127.0.0.1:8000"
+FRONTEND_URL="https://hotel-management-26.onrender.com"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -110,16 +107,29 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# postgress sql 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DB_NAME'),
+#         'USER': env('DB_USER'),
+#         'PASSWORD': env('DB_PASSWORD'),
+#         'HOST': env('DB_HOST'),
+#         'PORT': env('DB_PORT'),
+#     }
+# }
+
+# Live data base of render 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        default='postgresql://hotel_management_21_user:1Ya11jK4JaySNRAX3mIz87RlmPLCHm4w@dpg-cvao0ulsvqrc73c0a2m0-a.oregon-postgres.render.com/hotel_management_21',
+        conn_max_age=600
+    )
 }
+
+
 
 INSTALLED_APPS += ['hotels','users']
 
@@ -136,7 +146,7 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'users.UserProfile'
 LOGIN_REDIRECT_URL = "hotel_list"
 
-# Email settings (Use a real SMTP service in production)
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -147,11 +157,7 @@ EMAIL_APP_PASSWORD =env('EMAIL_APP_PASSWORD')
 # Media files settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-
-# # Stripe settings
-# STRIPE_TEST_PUBLIC_KEY =  os.getenv('STRIPE_TEST_PUBLIC_KEY') 
-# STRIPE_TEST_SECRET_KEY =  os.getenv('STRIPE_TEST_SECRET_KEY') 
+ 
 
 STRIPE_TEST_PUBLIC_KEY = env('STRIPE_TEST_PUBLIC_KEY')
 STRIPE_TEST_SECRET_KEY = env('STRIPE_TEST_SECRET_KEY')
